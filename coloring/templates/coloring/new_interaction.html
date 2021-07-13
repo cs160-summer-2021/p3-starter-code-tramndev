@@ -10,8 +10,14 @@
 	<script type="text/javascript" src="{% static 'coloring/vendors/paper/paper-full.min.js' %}"></script>
 
 	<style type="text/css">
+		body {
+			margin: 0;
+			height: 100vh;
+			width: 100vw;
+		}
+
 		#color-palette {
-			width: 300px;
+			width: 108px;
 			background-color: #f1f1f1;
 			display: flex;
 			flex-wrap: wrap;
@@ -20,11 +26,11 @@
 		}
 
 		.swatch {
-			width: 24px;
-			height: 24px;
-			-moz-border-radius: 12px;
-			-webkit-border-radius: 12px;
-			border-radius: 12px;
+			width: 48px;
+			height: 48px;
+			-moz-border-radius: 24px;
+			-webkit-border-radius: 24px;
+			border-radius: 24px;
 			margin: 3px;
 		}
 
@@ -35,6 +41,7 @@
 		    margin-right: auto;
 		    display: block;
 		}
+
 	</style>
 
 	<script type="text/javascript" canvas="canvas">
@@ -72,7 +79,7 @@
 			function createColorPalette(colors){
 
 				// create a swatch for each color
-				for (var i = colors.length - 1; i >= 0; i--) {
+				for (var i = colors.length - 1; i >= 1; i--) {
 					var $swatch = $("<div>").css("background-color", colors[i])
 									   .addClass("swatch");
 					$swatch.click(function(){
@@ -103,6 +110,9 @@
 					mandala.item = item._children["design-freepik"];
 				    paper.project.insertLayer(0,mandala.item);
 
+					// Resize the image to match the size of canvas
+					paper.project.layers[0].fitBounds(paper.view.bounds)
+
 				    if (custom) {
 				    	myCustomInteraction();
 				    } else {
@@ -118,8 +128,8 @@
 	</script>
 </head>
 <body>
-
-	<canvas id="myCanvas" width="750px" height="750px"></canvas>
+	<!-- Adjust the canvas size -->
+	<canvas id="myCanvas" width="600px" height="600px"></canvas>
 	<div id="color-palette"></div>
 </body>
 </html>
