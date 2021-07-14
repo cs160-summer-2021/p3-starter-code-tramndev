@@ -14,14 +14,15 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
 	<style type="text/css">
-		body {
+		html, body {
 			margin: 0;
+			padding: 0;
 			height: 100vh;
 			width: 100vw;
 			background-color: rgb(252, 249, 249);
 		}
 
-		/* Styling for social media buttons  */
+		/* SOCIAL MEDIA BUTTONS */
 		.label-container{
 			position:fixed;
 			bottom:48px;
@@ -153,15 +154,15 @@
 		}
 		
 
-		
+		/* COLORING CONTROL PANEL */
 		#color-palette {
 			width: 74px;
-			background-color: #f1f1f1;
+			/* background-color: #f1f1f1; */
 			display: flex;
 			flex-wrap: wrap;
 			position: absolute;
-			top: 100px;
-			left: 30px;
+			top: 50px;
+			left: 50px;
 		}
 
 		.swatch {
@@ -173,14 +174,74 @@
 			margin: 5px;
 		}
 
+		.slidecontainer {
+			position: absolute;
+			width: 580px;
+			top: 328px;
+			left: -135px;
+		}
+
+		.slider {
+			-webkit-appearance: none;
+			width: 100%;
+			border-radius: 20px;
+			border-width: 0.5px;
+			border-style: solid;
+			border-color: silver;
+			box-shadow: 5px 5px 5px 5px #f4f1f1;
+			background: #ffd89b;
+			background: -webkit-linear-gradient(to right, #673BB7, white);
+			background: linear-gradient(to right, #673BB7, #ffffff);
+			outline: none;
+			opacity: 0.7;
+			-webkit-transition: .2s;
+			transition: opacity .2s;
+			transform: rotate(270deg);
+		}
+
+		.slider:hover {
+			opacity: 1;
+		}
+
+		.slider::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 30px;
+			height: 30px;
+			border-radius: 500%;
+			border-width: 0.5px;
+			border-style: solid;
+			border-color: silver;
+			background: white;
+			cursor: pointer;
+		}
+
+		.slider::-moz-range-thumb {
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			border-width: 0.5px;
+			border-style: solid;
+			border-color: silver;
+			background: white;
+			cursor: pointer;
+		}
+
 		/* CANVAS */
+		#canvas-container {
+			padding-top: 60px;
+			padding-right: 270px;
+			float: right;
+		}
+
 		#myCanvas {
-			padding: 20px;
+			width: 700px; 
+			height: 700px;
 		    margin-left: auto;
 		    margin-right: auto;
 		    display: block;
 			background-color: rgb(255, 255, 255);
-			box-shadow: 2px 2px 2px 2px #f4f1f1;
+			box-shadow: 5px 5px 5px 5px #f4f1f1;
 		}
 
 	</style>
@@ -207,11 +268,13 @@
 				var tool = new paper.Tool();
 
 				tool.onMouseDown = function (event) {
+					// If the position of the mouse is within a svg element
 				    var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
 				    if (hit) {
 				    		// Color pallette keeps track of the full history of colors, though we
 				    		// only color in with the most-recent color.
 				        hit.item.fillColor = cp.history[cp.history.length - 1];
+
 				    }
 				}
 			}
@@ -252,42 +315,54 @@
 				    paper.project.insertLayer(0,mandala.item);
 
 					// Resize the image to match the size of canvas
-					paper.project.layers[0].fitBounds(paper.view.bounds)
-
 				    tapToFill();
-
 				});
 			}
 
 			// Set up the mandala interactivity.
 			init(true);
+
 		}
 	</script>
 </head>
 <body>
-	<!-- Floating share button with submenu -->
-	<!-- http://androidcss.com/css/css3-floating-button-tutorial/ -->
-	<a href="#" class="float" id="menu-share">
-		<i class="fa fa-share my-float"></i>
-	</a>
-	<ul>
-		<li id='exit'><a href="#">
-			<i class="fa fa-sign-out my-float"></i>
-		</a></li>
-		<li id='facebook'><a href="#">
-			<i class="fa fa-facebook my-float"></i>
-		</a></li>
-		<li id='google'><a href="#">
-			<i class="fa fa-google-plus my-float"></i>
-		</a></li>
-		<li id='twitter'><a href="#">
-			<i class="fa fa-twitter my-float"></i>
-		</a></li>
-	</ul>
-	
+	<!-- COLORING CONTROL PANEL-->
 	<div id="color-palette"></div>
-	<!-- Adjust the canvas size -->
-	<canvas id="myCanvas" width="500px" height="500px"></canvas>
+
+	<!-- https://www.w3schools.com/howto/howto_js_rangeslider.asp -->
+	<div class="slidecontainer">
+		<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
+	</div>
+
+	<!-- CANVAS-->
+	<div id='canvas-container'><canvas id="myCanvas"></canvas></div>	
+
+	<!-- FLOATING SHARE BUTTON WITH SUBMENU -->
+	<!-- http://androidcss.com/css/css3-floating-button-tutorial/ -->
+	<div>
+		<a href="#" class="float" id="menu-share">
+			<i class="fa fa-share my-float"></i>
+		</a>
+		<ul>
+			<li id='exit'><a href="#">
+				<i class="fa fa-sign-out my-float"></i>
+			</a></li>
+			<li id='facebook'><a href="https://www.facebook.com/">
+				<i class="fa fa-facebook my-float"></i>
+			</a></li>
+			<li id='google'><a href="https://www.google.com/">
+				<i class="fa fa-google-plus my-float"></i>
+			</a></li>
+			<li id='twitter'><a href="https://twitter.com/?lang=en">
+				<i class="fa fa-twitter my-float"></i>
+			</a></li>
+		</ul>
+	</div>
+
 	
+
+	<script>
+		
+	</script>
 </body>
 </html>
