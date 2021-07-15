@@ -5,7 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   	<title>P3 Coloring</title>
-
+	
 	<script type="text/javascript" src="{% static 'coloring/vendors/jquery/jquery-3.3.1.min.js' %}"></script>
 	<script type="text/javascript" src="{% static 'coloring/vendors/paper/paper-full.min.js' %}"></script>
 
@@ -156,7 +156,7 @@
 
 		/* COLORING CONTROL PANEL */
 		#color-palette {
-			width: 74px;
+			width: 152px;
 			/* background-color: #f1f1f1; */
 			display: flex;
 			flex-wrap: wrap;
@@ -174,11 +174,11 @@
 			margin: 5px;
 		}
 
-		.slidecontainer {
+		/* .slidecontainer {
 			position: absolute;
 			width: 580px;
 			top: 328px;
-			left: -135px;
+			left: -155px;
 		}
 
 		.slider {
@@ -225,7 +225,7 @@
 			border-color: silver;
 			background: white;
 			cursor: pointer;
-		}
+		} */
 
 		/* CANVAS */
 		#canvas-container {
@@ -322,17 +322,90 @@
 			// Set up the mandala interactivity.
 			init(true);
 
+			// Toogling Tools: https://stackoverflow.com/questions/49215584/toggling-multiple-tools-on-paper-js
+			const activateTool = name => {
+				const tool = paper.tools.find(tool => tool.name === name);
+				tool.activate();
+			}			
+			;(() => {
+				const tool = new paper.Tool()
+				tool.name = 'toolPath'
+				let path
+				tool.onMouseDown = function(event) {
+					path = new paper.Path();
+					path.strokeColor = cp.history[cp.history.length - 1];
+					path.strokeWidth = 4;
+					path.add(event.point);
+				}
+				tool.onMouseDrag = function(event) {
+					path.add(event.point);
+				}
+			})()
+
+			;(() => {
+				const tool = new paper.Tool()
+				tool.name = 'toolFill'
+				tool.onMouseDown = function(event) {
+				    var hit = mandala.item.hitTest(event.point, { tolerance: 10, fill: true });
+				    if (hit) {
+				        hit.item.fillColor = cp.history[cp.history.length - 1];
+
+				    }
+				}
+			})()
+
+			;(() => {
+				const tool = new paper.Tool()
+				tool.name = 'toolLine';
+				let path;
+				tool.onMouseDown = function(event) {
+					path = new paper.Path();
+					path.strokeWidth = 4;
+					path.strokeColor = cp.history[cp.history.length - 1];
+					path.add(event.point);
+				}
+				tool.onMouseUp = function(event) {
+					path.add(event.point);
+				}
+			})()
+
+			;(() => {
+				const tool = new paper.Tool()
+				tool.name = 'eraser';
+				let path
+				tool.onMouseDown = function(event) {
+					path = new paper.Path();
+					path.strokeColor = '#FFFFFF';
+					path.strokeWidth = 8;
+					path.add(event.point);
+				}
+				tool.onMouseDrag = function(event) {
+					path.add(event.point);
+				}
+			})()
+
+			document.querySelectorAll('.tool-button').forEach(toolBtn => {
+					toolBtn.addEventListener('click', e => {
+					activateTool(e.target.getAttribute('data-tool-name'))
+				})
+			})
 		}
 	</script>
 </head>
 <body>
 	<!-- COLORING CONTROL PANEL-->
 	<div id="color-palette"></div>
-
+	
 	<!-- https://www.w3schools.com/howto/howto_js_rangeslider.asp -->
-	<div class="slidecontainer">
+	<!-- <div class="slidecontainer">
 		<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-	</div>
+	</div> -->
+
+	<!-- Painting Tools -->
+	<button class="tool-button" data-tool-name="toolPath">Path Tool</button>
+	<button class="tool-button" data-tool-name="toolFill">Fill Tool</button>
+	<button class="tool-button" data-tool-name="toolLine">Line Tool</button>
+	<button class="tool-button" data-tool-name="eraser">Eraser</button>
 
 	<!-- CANVAS-->
 	<div id='canvas-container'><canvas id="myCanvas"></canvas></div>	
@@ -358,11 +431,5 @@
 			</a></li>
 		</ul>
 	</div>
-
-	
-
-	<script>
-		
-	</script>
 </body>
 </html>
