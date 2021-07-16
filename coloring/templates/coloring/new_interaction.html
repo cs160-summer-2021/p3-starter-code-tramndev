@@ -177,63 +177,10 @@
 			margin: 5px;
 		}
 
-		/* .slidecontainer {
-			position: absolute;
-			width: 580px;
-			top: 328px;
-			left: -155px;
-		}
-
-		.slider {
-			-webkit-appearance: none;
-			width: 100%;
-			border-radius: 20px;
-			border-width: 0.5px;
-			border-style: solid;
-			border-color: silver;
-			box-shadow: 5px 5px 5px 5px #f4f1f1;
-			background: #ffd89b;
-			background: -webkit-linear-gradient(to right, #673BB7, white);
-			background: linear-gradient(to right, #673BB7, #ffffff);
-			outline: none;
-			opacity: 0.7;
-			-webkit-transition: .2s;
-			transition: opacity .2s;
-			transform: rotate(270deg);
-		}
-
-		.slider:hover {
-			opacity: 1;
-		}
-
-		.slider::-webkit-slider-thumb {
-			-webkit-appearance: none;
-			appearance: none;
-			width: 30px;
-			height: 30px;
-			border-radius: 500%;
-			border-width: 0.5px;
-			border-style: solid;
-			border-color: silver;
-			background: white;
-			cursor: pointer;
-		}
-
-		.slider::-moz-range-thumb {
-			width: 25px;
-			height: 25px;
-			border-radius: 50%;
-			border-width: 0.5px;
-			border-style: solid;
-			border-color: silver;
-			background: white;
-			cursor: pointer;
-		} */
-
 		/* CANVAS */
 		#canvas-container {
 			padding-top: 60px;
-			padding-right: 270px;
+			padding-right: 300px;
 			float: right;
 		}
 
@@ -245,6 +192,29 @@
 		    display: block;
 			background-color: rgb(255, 255, 255);
 			box-shadow: 5px 5px 5px 5px #f4f1f1;
+		}
+
+		#tool-panel {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			position: fixed;
+			bottom:40px;
+			width: 100vw;
+			justify-content: center;
+		}
+
+		
+		.tool-float{
+			width:85px;
+			height:85px;
+			background-color:transparent ;
+			color: blue;
+			border-radius:50px;
+			border-width: 0px;
+			text-align:center;
+			box-shadow: 2px 2px 3px #999;
+			z-index:1000;
 		}
 
 	</style>
@@ -331,9 +301,9 @@
 				tool.activate();
 			}			
 			;(() => {
-				const tool = new paper.Tool()
-				tool.name = 'toolPath'
-				let path
+				const tool = new paper.Tool();
+				tool.name = 'toolPath';
+				let path;
 				tool.onMouseDown = function(event) {
 					path = new paper.Path();
 					path.strokeColor = cp.history[cp.history.length - 1];
@@ -358,7 +328,8 @@
 			})()
 
 			;(() => {
-				const tool = new paper.Tool()
+				console.log("Tool Line");
+				const tool = new paper.Tool();
 				tool.name = 'toolLine';
 				let path;
 				tool.onMouseDown = function(event) {
@@ -373,7 +344,7 @@
 			})()
 
 			;(() => {
-				const tool = new paper.Tool()
+				const tool = new paper.Tool();
 				tool.name = 'eraser';
 				let path
 				tool.onMouseDown = function(event) {
@@ -389,7 +360,7 @@
 
 			document.querySelectorAll('.tool-button').forEach(toolBtn => {
 					toolBtn.addEventListener('click', e => {
-					activateTool(e.target.getAttribute('data-tool-name'))
+					activateTool(e.target.getAttribute('data-tool-name'));
 				})
 			})
 		}
@@ -398,18 +369,15 @@
 <body>
 	<!-- COLORING CONTROL PANEL-->
 	<div id="color-palette"></div>
-	
-	<!-- https://www.w3schools.com/howto/howto_js_rangeslider.asp -->
-	<!-- <div class="slidecontainer">
-		<input type="range" min="1" max="100" value="50" class="slider" id="myRange">
-	</div> -->
 
 	<!-- Painting Tools -->
-	<button class="tool-button" data-tool-name="toolPath">Path Tool</button>
-	<button class="tool-button" data-tool-name="toolFill">Fill Tool</button>
-	<button class="tool-button" data-tool-name="toolLine">Line Tool</button>
-	<button class="tool-button" data-tool-name="eraser">Eraser</button>
-
+	<div id="tool-panel">
+		<button class="tool-button tool-float" data-tool-name="toolPath"><img src="https://i.ibb.co/0y6Gjyq/paintbrush.png" alt="paintbrush" width="40px" style="transform: scaleX(-1);"></button>
+		<button class="tool-button tool-float" data-tool-name="toolFill" style="margin-left: 20px;"><img src="https://i.ibb.co/KFwqXCr/paint-bucket.png" alt="paint-bucket" width="40px"></button>
+		<button class="tool-button tool-float" data-tool-name="toolLine" style="margin-left: 20px;"><img src="https://i.ibb.co/vByvCY5/line.png" alt="line" width="40px"></button>
+		<button class="tool-button tool-float" data-tool-name="eraser" style="margin-left: 20px;"><img src="https://i.ibb.co/Y0pVwMc/eraser.png" alt="eraser" width="40px"></button>
+	</div>
+	
 	<input data-jscolor="{}" value="#3399FF">
 
 	<!-- CANVAS-->
