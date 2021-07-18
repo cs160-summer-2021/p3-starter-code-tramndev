@@ -12,7 +12,7 @@ npm install --prefix frontend
 ## Usage
 
 ```bash
-npm run start --prefix frontend
+npm start --prefix frontend
 curl http://localhost:8000/coloring/new_interaction
 
 # or for macOS, can open web browser with CLI
