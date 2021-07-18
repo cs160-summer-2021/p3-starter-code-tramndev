@@ -217,6 +217,11 @@
 			z-index:1000;
 		}
 
+		.tool-image {
+			width: 40px;
+			pointer-events:none;
+		}
+
 	</style>
 
 	<script type="text/javascript" canvas="canvas">
@@ -307,13 +312,14 @@
 				tool.onMouseDown = function(event) {
 					path = new paper.Path();
 					path.strokeColor = cp.history[cp.history.length - 1];
-					path.strokeWidth = 4;
+					path.strokeWidth = 3;
 					path.add(event.point);
 				}
 				tool.onMouseDrag = function(event) {
 					path.add(event.point);
 				}
 			})()
+
 
 			;(() => {
 				const tool = new paper.Tool()
@@ -328,7 +334,6 @@
 			})()
 
 			;(() => {
-				console.log("Tool Line");
 				const tool = new paper.Tool();
 				tool.name = 'toolLine';
 				let path;
@@ -345,7 +350,29 @@
 
 			;(() => {
 				const tool = new paper.Tool();
-				tool.name = 'eraser';
+				tool.name = 'toolCircle';
+				let path;
+				tool.onMouseDown = function(event) {
+					path = new paper.Path();
+				}
+				tool.onMouseDrag =function(event) {
+					path.add(event.point);
+					path.strokeWidth = 4;
+					path.strokeColor = 'rgba(0,0,0,0.5)';
+				}
+				tool.onMouseUp = function(event) {
+					var circle = new paper.Path.Circle({
+						center: event.middlePoint,
+						radius: event.delta.length / 2
+					});
+					circle.strokeWidth = 4;
+					circle.strokeColor = cp.history[cp.history.length - 1];
+				}
+			})()
+
+			;(() => {
+				const tool = new paper.Tool();
+				tool.name = 'toolEraser';
 				let path
 				tool.onMouseDown = function(event) {
 					path = new paper.Path();
@@ -372,10 +399,11 @@
 
 	<!-- Painting Tools -->
 	<div id="tool-panel">
-		<button class="tool-button tool-float" data-tool-name="toolPath"><img src="https://i.ibb.co/0y6Gjyq/paintbrush.png" alt="paintbrush" width="40px" style="transform: scaleX(-1);"></button>
-		<button class="tool-button tool-float" data-tool-name="toolFill" style="margin-left: 20px;"><img src="https://i.ibb.co/KFwqXCr/paint-bucket.png" alt="paint-bucket" width="40px"></button>
-		<button class="tool-button tool-float" data-tool-name="toolLine" style="margin-left: 20px;"><img src="https://i.ibb.co/vByvCY5/line.png" alt="line" width="40px"></button>
-		<button class="tool-button tool-float" data-tool-name="eraser" style="margin-left: 20px;"><img src="https://i.ibb.co/Y0pVwMc/eraser.png" alt="eraser" width="40px"></button>
+		<button class="tool-button tool-float" data-tool-name="toolPath"><img src="https://i.ibb.co/0y6Gjyq/paintbrush.png" alt="paintbrush" style="transform: scaleX(-1);" class="tool-image"></button>
+		<button class="tool-button tool-float" data-tool-name="toolFill" style="margin-left: 20px;"><img src="https://i.ibb.co/KFwqXCr/paint-bucket.png" alt="paint-bucket" class="tool-image"></button>
+		<button class="tool-button tool-float" data-tool-name="toolLine" style="margin-left: 20px;"><img src="https://i.ibb.co/vByvCY5/line.png" alt="line" class="tool-image"></button>
+		<button class="tool-button tool-float" data-tool-name="toolCircle" style="margin-left: 20px;"><img src="https://i.ibb.co/LR1Rh2H/circumference-1.png" alt="circumference-1" class="tool-image"></button>
+		<button class="tool-button tool-float" data-tool-name="toolEraser" style="margin-left: 20px;"><img src="https://i.ibb.co/Y0pVwMc/eraser.png" alt="eraser"class="tool-image"></button>
 	</div>
 	
 	<input data-jscolor="{}" value="#3399FF">
