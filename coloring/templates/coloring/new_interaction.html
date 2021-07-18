@@ -159,7 +159,7 @@
 
 		/* COLORING CONTROL PANEL */
 		#color-palette {
-			width: 152px;
+			width: 160px;
 			/* background-color: #f1f1f1; */
 			display: flex;
 			flex-wrap: wrap;
@@ -175,6 +175,9 @@
 			-webkit-border-radius: 32px;
 			border-radius: 32px;
 			margin: 5px;
+			border-width: 2px;
+			border-style: solid;
+			border-color: rgb(247, 237, 237);
 		}
 
 		/* CANVAS */
@@ -194,12 +197,20 @@
 			box-shadow: 5px 5px 5px 5px #f4f1f1;
 		}
 
+		.tool-control {
+			bottom: 50px;
+			height: 160px;
+			position: absolute;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+		}
+
 		#tool-panel {
 			display: flex;
 			flex-direction: row;
 			flex-wrap: wrap;
-			position: fixed;
-			bottom:40px;
 			width: 100vw;
 			justify-content: center;
 		}
@@ -209,7 +220,7 @@
 			width:85px;
 			height:85px;
 			background-color:transparent ;
-			color: blue;
+			color: #1DA1F2;
 			border-radius:50px;
 			border-width: 0px;
 			text-align:center;
@@ -221,12 +232,65 @@
 			width: 40px;
 			pointer-events:none;
 		}
+		.slidecontainer {
+			bottom: 170px;
+			left: 30%;
+			width: 520px;
+			height: 50px;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			
 
+		}
+		.slider {
+			-webkit-appearance: none;
+			width: 100%;
+			border-radius: 20px;
+			border-width: 0.5px;
+			border-style: solid;
+			border-color: silver;
+			box-shadow: 5px 5px 5px 5px #f4f1f1;
+			background: white;
+			outline: none;
+			opacity: 0.7;
+			-webkit-transition: .2s;
+			transition: opacity .2s;
+			display: inline-block;
+		}
+		.slider:hover {
+			opacity: 1;
+		}
+		.slider::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			appearance: none;
+			width: 20px;
+			height: 20px;
+			border-radius: 500%;
+			border-width: 0.5px;
+			border-style: solid;
+			border-color: silver;
+			background: #1DA1F2;
+			cursor: pointer;
+		}
+		.slider::-moz-range-thumb {
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			border-width: 0.5px;
+			border-style: solid;
+			border-color: silver;
+			background: white;
+			cursor: pointer;
+		}
 	</style>
 
 	<script type="text/javascript" canvas="canvas">
 		window.onload = function() {
 			var canvas = document.getElementById('myCanvas');
+			
+			var strokeSize = 10;
 
 			// coloring page
 			var mandala = {
@@ -300,11 +364,18 @@
 			// Set up the mandala interactivity.
 			init(true);
 
+			// Change stroke size using slider: https://stackoverflow.com/questions/56912782/change-linewidth-on-canvas-using-slider-in-javascript-jquery
+			theLineWidth.addEventListener("input",function () {
+				strokeSize = theLineWidth.value;
+			});
+
 			// Toogling Tools: https://stackoverflow.com/questions/49215584/toggling-multiple-tools-on-paper-js
+			// Mouse Tools: http://paperjs.org/tutorials/interaction/creating-mouse-tools/
 			const activateTool = name => {
 				const tool = paper.tools.find(tool => tool.name === name);
 				tool.activate();
-			}			
+			}
+			
 			;(() => {
 				const tool = new paper.Tool();
 				tool.name = 'toolPath';
@@ -312,7 +383,7 @@
 				tool.onMouseDown = function(event) {
 					path = new paper.Path();
 					path.strokeColor = cp.history[cp.history.length - 1];
-					path.strokeWidth = 3;
+					path.strokeWidth = strokeSize;
 					path.add(event.point);
 				}
 				tool.onMouseDrag = function(event) {
@@ -320,7 +391,7 @@
 				}
 			})()
 
-
+			
 			;(() => {
 				const tool = new paper.Tool()
 				tool.name = 'toolFill'
@@ -332,14 +403,14 @@
 				    }
 				}
 			})()
-
+			
 			;(() => {
 				const tool = new paper.Tool();
 				tool.name = 'toolLine';
 				let path;
 				tool.onMouseDown = function(event) {
 					path = new paper.Path();
-					path.strokeWidth = 4;
+					path.strokeWidth = strokeSize;
 					path.strokeColor = cp.history[cp.history.length - 1];
 					path.add(event.point);
 				}
@@ -357,15 +428,13 @@
 				}
 				tool.onMouseDrag =function(event) {
 					path.add(event.point);
-					path.strokeWidth = 4;
-					path.strokeColor = 'rgba(0,0,0,0.5)';
 				}
 				tool.onMouseUp = function(event) {
 					var circle = new paper.Path.Circle({
 						center: event.middlePoint,
 						radius: event.delta.length / 2
 					});
-					circle.strokeWidth = 4;
+					circle.strokeWidth = strokeSize;
 					circle.strokeColor = cp.history[cp.history.length - 1];
 				}
 			})()
@@ -377,7 +446,7 @@
 				tool.onMouseDown = function(event) {
 					path = new paper.Path();
 					path.strokeColor = '#FFFFFF';
-					path.strokeWidth = 8;
+					path.strokeWidth = strokeSize;
 					path.add(event.point);
 				}
 				tool.onMouseDrag = function(event) {
@@ -385,7 +454,7 @@
 				}
 			})()
 
-			document.querySelectorAll('.tool-button').forEach(toolBtn => {
+				document.querySelectorAll('.tool-button').forEach(toolBtn => {
 					toolBtn.addEventListener('click', e => {
 					activateTool(e.target.getAttribute('data-tool-name'));
 				})
@@ -397,15 +466,26 @@
 	<!-- COLORING CONTROL PANEL-->
 	<div id="color-palette"></div>
 
-	<!-- Painting Tools -->
-	<div id="tool-panel">
-		<button class="tool-button tool-float" data-tool-name="toolPath"><img src="https://i.ibb.co/0y6Gjyq/paintbrush.png" alt="paintbrush" style="transform: scaleX(-1);" class="tool-image"></button>
-		<button class="tool-button tool-float" data-tool-name="toolFill" style="margin-left: 20px;"><img src="https://i.ibb.co/KFwqXCr/paint-bucket.png" alt="paint-bucket" class="tool-image"></button>
-		<button class="tool-button tool-float" data-tool-name="toolLine" style="margin-left: 20px;"><img src="https://i.ibb.co/vByvCY5/line.png" alt="line" class="tool-image"></button>
-		<button class="tool-button tool-float" data-tool-name="toolCircle" style="margin-left: 20px;"><img src="https://i.ibb.co/LR1Rh2H/circumference-1.png" alt="circumference-1" class="tool-image"></button>
-		<button class="tool-button tool-float" data-tool-name="toolEraser" style="margin-left: 20px;"><img src="https://i.ibb.co/Y0pVwMc/eraser.png" alt="eraser"class="tool-image"></button>
+	<div class="tool-control"> 
+		
+		<div class="slidecontainer">
+			<img src="https://i.ibb.co/C103nLM/stroke.png" alt="stroke" style="padding-right: 10px;">  
+			<input type="range" class='slider' id="theLineWidth"  min="1" max="40" value="2" title="Line width" oninput="this.nextElementSibling.value = this.value"> 
+			<output style="padding-left:10px; font-size: 24px; font-weight: 800; padding-right: 3px;">24</output> px
+		</div>
+		<div id="tool-panel">
+			<button class="tool-button tool-float" data-tool-name="toolPath"><img src="https://i.ibb.co/0y6Gjyq/paintbrush.png" alt="paintbrush" style="transform: scaleX(-1);" class="tool-image"></button>
+			<button class="tool-button tool-float" data-tool-name="toolFill" style="margin-left: 20px;"><img src="https://i.ibb.co/KFwqXCr/paint-bucket.png" alt="paint-bucket" class="tool-image"></button>
+			<button class="tool-button tool-float" data-tool-name="toolLine" style="margin-left: 20px;"><img src="https://i.ibb.co/vByvCY5/line.png" alt="line" class="tool-image"></button>
+			<button class="tool-button tool-float" data-tool-name="toolCircle" style="margin-left: 20px;"><img src="https://i.ibb.co/LR1Rh2H/circumference-1.png" alt="circumference-1" class="tool-image"></button>
+			<button class="tool-button tool-float" data-tool-name="toolEraser" style="margin-left: 20px;"><img src="https://i.ibb.co/Y0pVwMc/eraser.png" alt="eraser"class="tool-image"></button>
+		</div>
 	</div>
+	<!-- Painting Tools -->
 	
+	
+	
+
 	<input data-jscolor="{}" value="#3399FF">
 
 	<!-- CANVAS-->
