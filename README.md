@@ -6,7 +6,6 @@ If on macOS, use [Homebrew package manager](https://brew.sh/)
 
 ```bash
 brew install node@16
-cd frontend
 npm install --prefix frontend
 npm run start --prefix frontend
 ```
