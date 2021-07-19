@@ -10,5 +10,5 @@ def demo(request):
 def new_interaction(request):
     return render(request, 'coloring/new_interaction.html')
 
-def paintbrush(request):
-    return render(request, 'coloring/paintbrush.html')
+def art_collection(request):
+    return render(request, 'coloring/art_collection.html')
