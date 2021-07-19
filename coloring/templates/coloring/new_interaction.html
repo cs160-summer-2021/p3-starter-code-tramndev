@@ -90,7 +90,7 @@
 		}
 
 		#exit {
-			background-color: #f94134;
+			background-color: #43A600;
 			border-radius:50px;
 		}
 		#facebook {
@@ -183,12 +183,15 @@
 		/* CANVAS */
 		#canvas-container {
 			padding-top: 60px;
-			padding-left: 25%;
+			padding-right: 300px;
+			float: right;
 		}
 
 		#myCanvas {
 			width: 700px; 
 			height: 700px;
+		    margin-left: auto;
+		    margin-right: auto;
 		    display: block;
 			background-color: rgb(255, 255, 255);
 			box-shadow: 5px 5px 5px 5px #f4f1f1;
@@ -267,7 +270,7 @@
 			border-radius: 500%;
 			border-width: 0.5px;
 			border-style: solid;
-			border-color: rgb(181, 181, 181);
+			border-color: silver;
 			background: #1DA1F2;
 			cursor: pointer;
 		}
@@ -281,24 +284,12 @@
 			background: white;
 			cursor: pointer;
 		}
-		
-		#color-picker {
-			position: absolute;
-			bottom: 200px;
-			width: 140px;
-			height: 140px;
-			left: 60px;
-			border-radius: 10%;
-			border-width: 0px;
-			text-align:center;
-			box-shadow: 2px 2px 3px #999;
-		}
-
 	</style>
 
 	<script type="text/javascript" canvas="canvas">
 		window.onload = function() {
 			var canvas = document.getElementById('myCanvas');
+			
 			var strokeSize = 10;
 
 			// coloring page
@@ -373,10 +364,6 @@
 			// Set up the mandala interactivity.
 			init(true);
 
-			// Refresh page if the reset button is clicked
-			$("exit").on("click", function () {
-				window.location.reload();
-			});
 			// Change stroke size using slider: https://stackoverflow.com/questions/56912782/change-linewidth-on-canvas-using-slider-in-javascript-jquery
 			theLineWidth.addEventListener("input",function () {
 				strokeSize = theLineWidth.value;
@@ -480,6 +467,7 @@
 	<div id="color-palette"></div>
 
 	<div class="tool-control"> 
+		
 		<div class="slidecontainer">
 			<img src="https://i.ibb.co/C103nLM/stroke.png" alt="stroke" style="padding-right: 10px;">  
 			<input type="range" class='slider' id="theLineWidth"  min="1" max="40" value="2" title="Line width" oninput="this.nextElementSibling.value = this.value"> 
@@ -493,6 +481,12 @@
 			<button class="tool-button tool-float" data-tool-name="toolEraser" style="margin-left: 20px;"><img src="https://i.ibb.co/Y0pVwMc/eraser.png" alt="eraser"class="tool-image"></button>
 		</div>
 	</div>
+	<!-- Painting Tools -->
+	
+	
+	
+
+	<input data-jscolor="{}" value="#3399FF">
 
 	<!-- CANVAS-->
 	<div id='canvas-container'><canvas id="myCanvas"></canvas></div>	
@@ -504,8 +498,8 @@
 			<i class="fa fa-share my-float"></i>
 		</a>
 		<ul>
-			<li id='exit' ><a href="">
-				<i class="fa fa-trash my-float" ></i>
+			<li id='exit'><a href="#">
+				<i class="fa fa-sign-out my-float"></i>
 			</a></li>
 			<li id='facebook'><a href="https://www.facebook.com/">
 				<i class="fa fa-facebook my-float"></i>
