@@ -5,7 +5,6 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   	<title>P3 Coloring</title>
-	
 	<script type="text/javascript" src="{% static 'coloring/vendors/jquery/jquery-3.3.1.min.js' %}"></script>
 	<script type="text/javascript" src="{% static 'coloring/vendors/paper/paper-full.min.js' %}"></script>
 
@@ -92,7 +91,7 @@
 			background-color: green;
 			border-radius:50px;
 		}
-		#exit {
+		#reset {
 			background-color: #f94134;
 			border-radius:50px;
 		}
@@ -377,7 +376,7 @@
 			init(true);
 
 			// Refresh page if the reset button is clicked
-			$("exit").on("click", function () {
+			$("reset").on("click", function () {
 				window.location.reload();
 			});
 			// Change stroke size using slider: https://stackoverflow.com/questions/56912782/change-linewidth-on-canvas-using-slider-in-javascript-jquery
@@ -386,7 +385,7 @@
 			});
 
 			// Toogling Tools: https://stackoverflow.com/questions/49215584/toggling-multiple-tools-on-paper-js
-			// Mouse Tools: http://paperjs.org/tutorials/interaction/creating-mouse-tools/
+			// Mouse Drawing Tools (Line Tool, Circle Tool, Path Tooth): http://paperjs.org/tutorials/interaction/creating-mouse-tools/
 			const activateTool = name => {
 				const tool = paper.tools.find(tool => tool.name === name);
 				tool.activate();
@@ -483,6 +482,7 @@
 	<div id="color-palette"></div>
 
 	<div class="tool-control"> 
+		<!-- Range slider customization: https://www.w3schools.com/howto/howto_js_rangeslider.asp -->
 		<div class="slidecontainer">
 			<img src="https://i.ibb.co/C103nLM/stroke.png" alt="stroke" style="padding-right: 10px;">  
 			<input type="range" class='slider' id="theLineWidth"  min="1" max="40" value="2" title="Line width" oninput="this.nextElementSibling.value = this.value"> 
@@ -510,9 +510,7 @@
 			<li id='out'><a href="art_collection">
 				<i class="fa fa-sign-out my-float"></i>
 			</a></li>
-			<li id='exit' ><a href="">
-				<i class="fa fa-trash my-float" ></i>
-			</a></li>
+			
 			<li id='facebook'><a href="https://www.facebook.com/">
 				<i class="fa fa-facebook my-float"></i>
 			</a></li>
@@ -521,6 +519,9 @@
 			</a></li>
 			<li id='twitter'><a href="https://twitter.com/?lang=en">
 				<i class="fa fa-twitter my-float"></i>
+			</a></li>
+			<li id='reset' ><a href="">
+				<i class="fa fa-trash my-float" ></i>
 			</a></li>
 		</ul>
 	</div>
